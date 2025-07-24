@@ -125,11 +125,29 @@ export default function ClientJobDetailsPage() {
     }
   }
 
+  const deleteJob = async ()=>{
+    const res = await axios.delete(`/api/jobs/client/job/${jobId}/delete-job`)
+    if(res.status === 201){
+      router.push(`/client/dashboard/${session?.user?.id}`)
+  }
+    else{
+      console.error("Failed to delete job")
+    }
+}
+const handleJobStatus = async()=>{
+  const res = await axios.patch(`/api/jobs/client/job/${jobId}/status`);
+
+  if(res.status === 201){
+    await fetchJob() // Refresh job data
+  } else {
+    console.error("Failed to update job status")
+  }
+}
   
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "OPEN":
+      case "open":
         return "bg-green-100 text-green-800"
       case "IN_PROGRESS":
         return "bg-blue-100 text-blue-800"
@@ -165,9 +183,7 @@ export default function ClientJobDetailsPage() {
             <p className="text-slate-600 mb-4">
               The job you're looking for doesn't exist or you don't have access to it.
             </p>
-            <Link href="/client/dashboard">
-              <Button>Back to Dashboard</Button>
-            </Link>
+         
           </CardContent>
         </Card>
       </div>
@@ -202,14 +218,7 @@ export default function ClientJobDetailsPage() {
             </div>
             <div className="flex items-center space-x-3">
               <Badge className={getStatusColor(job.status)}>{job.status.replace("_", " ")}</Badge>
-              <Button variant="outline" size="sm">
-                <Edit className="w-4 h-4 mr-2" />
-                Edit Job
-              </Button>
-              <Button variant="outline" size="sm" className="text-red-600 hover:text-red-700 bg-transparent">
-                <Trash2 className="w-4 h-4 mr-2" />
-                Delete
-              </Button>
+            
             </div>
           </div>
         </div>
@@ -412,19 +421,17 @@ export default function ClientJobDetailsPage() {
               </CardHeader>
               <CardContent className="space-y-3">
                 <Button className="w-full bg-transparent" variant="outline">
+                   <Link className=" flex  w-full items-center justify-center" href={`/client/jobs/${jobId}/edit-job`}>
                   <Edit className="w-4 h-4 mr-2" />
                   Edit Job Details
+                  </Link>
                 </Button>
-                <Button className="w-full bg-transparent" variant="outline">
-                  <Eye className="w-4 h-4 mr-2" />
-                  Preview as Freelancer
-                </Button>
-                <Button className="w-full bg-transparent" variant="outline" disabled={job.status !== "open"}>
+                <Button onClick={handleJobStatus} className="w-full bg-transparent" variant="outline"   >
                   <MessageSquare className="w-4 h-4 mr-2" />
-                  Close to New Proposals
+                  { job.status == 'open' ?  "Close to New Proposals" : "Reopen for Proposals" }
                 </Button>
                 <Separator />
-                <Button className="w-full text-red-600 hover:text-red-700 bg-transparent" variant="outline">
+                <Button onClick={deleteJob} className="w-full cursor-pointer text-red-600 hover:text-red-700 bg-transparent" variant="outline">
                   <Trash2 className="w-4 h-4 mr-2" />
                   Delete Job
                 </Button>

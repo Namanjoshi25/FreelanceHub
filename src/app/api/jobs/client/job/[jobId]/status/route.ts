@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 export async function PATCH(req:NextRequest,{params} :{params:{jobId:string}}){
     try {
    
-        let {jobId} = params
+        let jobId = params.jobId
         if(!jobId)  return NextResponse.json({error:"Job id not found"},{status:400})
           const job =   await prisma.job.findUnique({
         where:{

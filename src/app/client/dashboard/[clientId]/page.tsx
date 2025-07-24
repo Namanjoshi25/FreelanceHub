@@ -207,7 +207,7 @@ export default function ClientDashboard() {
 function JobCard({ job }: { job: Job }) {
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "OPEN":
+      case "open":
         return "bg-green-100 text-green-800"
       case "IN_PROGRESS":
         return "bg-blue-100 text-blue-800"

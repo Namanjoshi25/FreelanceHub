@@ -128,7 +128,7 @@ export default function FreelancerDashboard() {
 
   const pendingProposals = proposals.filter((p) => p.status === "pending").length
   const acceptedProposals = proposals.filter((p) => p.status === "accepted").length
-  const totalEarnings = proposals.filter((p) => p.status === "accepted").reduce((sum, p) => sum + p.proposedRate, 0)
+  const totalEarnings = proposals.filter((p) => p.status === "accepted").reduce((sum, p) => sum + p.proposedBudget, 0)
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -143,6 +143,8 @@ export default function FreelancerDashboard() {
                 </div>
                 <span className="text-xl font-bold text-slate-900">FreelanceHub</span>
               </Link>
+              <Link href={"/job/all-jobs"}>All jobs</Link>
+
               <Badge variant="secondary" className="bg-green-100 text-green-800">
                 Freelancer Dashboard
               </Badge>
